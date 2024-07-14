@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 influxdb-client = "^1.44.0"
 python-dotenv = "^1.0.1"
+pywizlight = "^0.5.14"
 
 
 [build-system]

@@ -20,6 +20,8 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 
 def run():
 
+    print(f"Running at {datetime.now()}")
+
     url = f"https://api.octopus.energy/v1/electricity-meter-points/{mpanm}/meters/{meter_serial}/consumption/"
     params = {
         "page_size": 5,
