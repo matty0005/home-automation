@@ -12,7 +12,7 @@ mpanm = os.getenv("OCTOPUS_MPANM")
 meter_serial = os.getenv("OCTOPUS_METER_SERIAL")
 token = os.getenv("INFLUXDB_TOKEN")
 org = "matt"
-url = "http://10.10.0.85:8086"
+url = "http://grafana.lan:8086"
 bucket="octopus"
 
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
