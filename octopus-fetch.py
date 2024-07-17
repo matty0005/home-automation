@@ -24,7 +24,7 @@ def run():
 
     url = f"https://api.octopus.energy/v1/electricity-meter-points/{mpanm}/meters/{meter_serial}/consumption/"
     params = {
-        "page_size": 5,
+        "page_size": 100,
     }
     response = requests.get(url=url, auth=(api_key, ''), params=params)
     data = response.json()
