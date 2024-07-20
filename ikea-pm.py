@@ -13,11 +13,11 @@ load_dotenv()
 # Influx settings
 token = os.getenv("INFLUXDB_TOKEN")
 org = "matt"
-url = "http://grafana.lan:8086"
+url = "http://grafana.scotchegg.uk:8086"
 bucket="ikea_sensor"
 
 # MQTT settings
-BROKER = 'grafana.lan'
+BROKER = 'grafana.scotchegg.uk'
 PORT = 1883  # Default MQTT port
 VINDSTYRKA_TOPIC = 'zigbee2mqtt/0xa49e69fffe128a4c'
 

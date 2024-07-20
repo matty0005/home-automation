@@ -1,64 +1,64 @@
 import asyncio
+import subprocess
+import time
 
 from pywizlight import wizlight, PilotBuilder, discovery
 
+BULB_IPS = ['10.10.200.12', '10.10.200.13', '10.10.200.14', '10.10.200.15']
+COLOUR_TEMP = 3000
+
+def ping(ip):
+  try:
+    output = subprocess.run(['ping', '-c', '1', '-W', '1', ip], capture_output=True)
+    return output.returncode == 0
+
+  except Exception as e:
+    print(f"An error occurred: {e}")
+    return False
+
+class PhillipsWiz():
+  def __init__(self, ip):
+    self._ip = ip
+    self._wizlight = wizlight(ip)
+    print(self._wizlight)
+
+  async def set_colour(self, colour_temp=3000, brightness=255):
+    print(f"Setting colour for {self._ip}")
+    await self._wizlight.turn_on(PilotBuilder(brightness=brightness, colortemp=colour_temp))
+
+  async def get_state(self):
+    return await self._wizlight.updateState()
+
+  async def get_colour_temp(self):
+    state = await self.get_state()
+    return state.get_colortemp()
+
+  def get_ip(self):
+    return self._ip
+
+
 async def main():
-    """Sample code to work with bulbs."""
-    # Discover all bulbs in the network via broadcast datagram (UDP)
-    # function takes the discovery object and returns a list of wizlight objects.
-    bulbs = await discovery.discover_lights(broadcast_space="10.10.0.255")
-    # Print the IP address of the bulb on index 0
-    print(f"Bulb IP address: {bulbs[0].ip}")
+  bulbs = []
+  for ip in BULB_IPS:
+    bulbs.append(PhillipsWiz(ip))
 
-    # Iterate over all returned bulbs
+  while True:
     for bulb in bulbs:
-        print(bulb.__dict__)
-        # Turn off all available bulbs
-        # await bulb.turn_off()
+      if ping(bulb.get_ip()):
+        try:
+          colour_temp = await bulb.get_colour_temp()
+          print(colour_temp)
+          if colour_temp != COLOUR_TEMP: 
+            await bulb.set_colour(colour_temp=COLOUR_TEMP)
+        except Exception as e:
+          print(f"An error occurred: {e}")
 
-    # Set up a standard light
-    light = wizlight("192.168.1.27")
-  
-
-    await light.turn_on(PilotBuilder(brightness = 255))
-
-    # Set bulb brightness (with async timeout)
-    timeout = 10
-    await asyncio.wait_for(light.turn_on(PilotBuilder(brightness = 255)), timeout)
-
-    # Set bulb to warm white
-    await light.turn_on(PilotBuilder(warm_white = 255))
+    time.sleep(1)
 
 
-    # Get the current color temperature, RGB values
-    state = await light.updateState()
-    print(state.get_colortemp())
-    print(state.get_scene())
-   
-    # Start a scene
-    await light.turn_on(PilotBuilder(scene = 4)) # party
+def _main():
+  loop = asyncio.get_event_loop()
+  loop.run_until_complete(main())
 
-
-    # Get the features of the bulb
-    bulb_type = await bulbs[0].get_bulbtype()
-    print(bulb_type.features.brightness) # returns True if brightness is supported
-    print(bulb_type.features.color) # returns True if color is supported
-    print(bulb_type.features.color_tmp) # returns True if color temperatures are supported
-    print(bulb_type.features.effect) # returns True if effects are supported
-    print(bulb_type.kelvin_range.max) # returns max kelvin in INT
-    print(bulb_type.kelvin_range.min) # returns min kelvin in INT
-    print(bulb_type.name) # returns the module name of the bulb
-
-    # Turn the light off
-    await light.turn_off()
-
-    # Do operations on multiple lights in parallel
-    bulb1 = wizlight("<your bulb1 ip>")
-    bulb2 = wizlight("<your bulb2 ip>")
-    async def turn_bulbs_on(bulb1, bulb2):
-       await asyncio.gather(bulb1.turn_on(PilotBuilder(warm_white=255)), bulb2.turn_on(PilotBuilder(warm_white=255)))
-     def main:
-       asyncio.run(async turn_bulbs_on(bulb1, bulb2))
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+if __name__ == '__main__':
+  _main()

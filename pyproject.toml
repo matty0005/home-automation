@@ -11,6 +11,8 @@ influxdb-client = "^1.44.0"
 python-dotenv = "^1.0.1"
 pywizlight = "^0.5.14"
 paho-mqtt = "^2.1.0"
+pexpect = "^4.9.0"
+aranet4 = "^2.3.4"
 
 
 [build-system]
