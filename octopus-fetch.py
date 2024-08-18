@@ -28,7 +28,6 @@ def run():
     }
     response = requests.get(url=url, auth=(api_key, ''), params=params)
     data = response.json()
-
     for item in data['results']:
         timestamp = datetime.strptime(item['interval_start'], "%Y-%m-%dT%H:%M:%S%z").isoformat()
         consumption = item['consumption']
@@ -44,7 +43,7 @@ def run():
 def main():
     while True:
         run()
-        time.sleep(3600)
+        time.sleep(360)
 
 if __name__ == '__main__':
     main()
