@@ -36,7 +36,8 @@ class PhillipsWiz():
     self._colour_temp = self._state.get_colortemp()
 
     # Call handlers
-    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:01')
+    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:08', 0.5)
+    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:10', 1)
     await self.schedule_off(['mon','tue', 'wed', 'thu', 'fri'],'07:30')
 
 
@@ -56,12 +57,12 @@ class PhillipsWiz():
     return True
 
 
-  async def schedule_on(self, days, time):
+  async def schedule_on(self, days, time, brightness):
 
     if not self._meets_schedule(days, time):
       return
     
-    await self.set_colour(colour_temp=self._colour_temp)
+    await self.set_colour(colour_temp=self._colour_temp, brightness=brightness)
 
   async def schedule_off(self, days, time):
 
