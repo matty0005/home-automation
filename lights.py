@@ -7,6 +7,7 @@ from datetime import datetime
 
 BULB_IPS = ['10.10.200.12', '10.10.200.13', '10.10.200.14', '10.10.200.15']
 COLOUR_TEMP = 3000
+FULL_BRIGHTNESS = 255
 
 def ping(ip):
   try:
@@ -36,8 +37,8 @@ class PhillipsWiz():
     self._colour_temp = self._state.get_colortemp()
 
     # Call handlers
-    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:08', 0.5)
-    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:10', 1)
+    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:08', 0.5 * FULL_BRIGHTNESS)
+    await self.schedule_on(['mon','tue', 'wed', 'thu', 'fri'],'07:10', 1 * FULL_BRIGHTNESS)
     await self.schedule_off(['mon','tue', 'wed', 'thu', 'fri'],'07:30')
 
 

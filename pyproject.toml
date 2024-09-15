@@ -13,6 +13,7 @@ pywizlight = "^0.5.14"
 paho-mqtt = "^2.1.0"
 pexpect = "^4.9.0"
 aranet4 = "^2.3.4"
+gunicorn = "^23.0.0"
 
 
 [build-system]
